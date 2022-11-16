@@ -35,9 +35,9 @@ router.post('/startStream', async function(req, res, next) {
 function startRestreamToCDN(key, lang, streamid, req){
   let params=["-re", "-i", "rtmp://localhost/live/"+key, "-c:v", "copy","-c:a", "aac", "-af", "pan=mono|c0=c"+(lang=="ru"?0:1), "-f", "flv", "rtmp://pub2.rtmp.s01.l.fabrikanews.cdnvideo.ru/fabrikanews4/"+key+lang+"?auth=20200s9FJSP2v2ASD3" ]
   let stream = spawn("ffmpeg", params , {detached: true});
-  stream.on("close", async (code) => {
-    console.log(`ffmpeg close om ${key} ${lang}`);
-  });
+  //stream.on("close", async (code) => {
+  //  console.log(`ffmpeg close om ${key} ${lang}`);
+  //});
   stream.unref();
 }
 function startRecord(key, streamid, recordid, req){
@@ -45,7 +45,7 @@ function startRecord(key, streamid, recordid, req){
   let params=["-re", "-i", "rtmp://localhost/live/"+key, "-c", "copy",  "-f", "matroska", "/var/video/"+filename ]
   let stream = spawn("ffmpeg", params , {detached: true});
   console.log("record started: "+ filename )
-  stream.stderr.on("data", data => {
+  /stream.stderr.on("data", data => {
    // console.log(`stderr: ${data}`);
   });
   stream.on("close", async (code) => {
