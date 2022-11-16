@@ -21,13 +21,14 @@ router.post('/startStream', async function(req, res, next) {
     startRestreamToCDN(req.body.name,"en", streams[0].id, req);
     await req.knex("t_22_streams").update({recStatus:new Date()}).where({id:streams[0].id});
 
+
+    let filename=startRecord(req.body.name, streams[0].id, rec[0].id, req);
     let rec=await req.knex("t_22_records").insert({
       startDate:new Date(),
       startDateUnix:moment().unix(),
       streamid:streams[0].id,
-      filename:req.body.filename
+      filename:filename
     }, "*")
-    startRecord(req.body.name, streams[0].id, rec[0].id, req);
   },500)
 });
 
@@ -54,6 +55,7 @@ function startRecord(key, streamid, recordid, req){
     }, "*")
         .where({id:recordid})
   });
+  return filename;
 }
 
 module.exports = router;
