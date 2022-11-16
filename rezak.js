@@ -30,9 +30,15 @@ async function work(){
             //console.log(records[0].startDateUnix, moment(task.startDate).unix(),  moment(task.endDate).unix())
             createRecord(records[0].filename, "ru", {offsetStart:formatTime(offsetStart),duration:formatTime(duration) },
                 async (ruFilename )=>{
-                    console.log("ru rec created")
+
+                   await knex("t_22_trackTask").update({recUrlRu:ruFilename}).where({id:track[0].id})
                 }
                 )
+            createRecord(records[0].filename, "en", {offsetStart:formatTime(offsetStart),duration:formatTime(duration) },
+                async (ruFilename )=>{
+                    await knex("t_22_trackTask").update({recUrlRu:ruFilename}).where({id:track[0].id})
+                }
+            )
         }
     }
 
