@@ -46,7 +46,7 @@ function startRecord(key, recordid, streamid, req){
     console.log(`stderr: ${data}`);
   });
   stream.on("close", async (code) => {
-    console.log(`ffmpeg record close om  ${key} ${lang}`);
+    console.log(`ffmpeg record close on  ${key} `);
     let rec=await req.knex("t_22_records").update({
       endDate:new Date(),
       endDateUnix:moment().unix(),
