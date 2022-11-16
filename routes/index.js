@@ -26,7 +26,7 @@ router.post('/startStream', async function(req, res, next) {
       startDateUnix:moment().unix(),
       streamid:streams[0].id,
       filename:req.body.filename
-    })
+    }, "*")
     startRecord(req.body.name, streams[0].id, rec[0].id, req);
   },500)
 });
