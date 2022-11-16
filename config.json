@@ -1,0 +1,11 @@
+{
+  "pgConnection":  {
+    "host" : "127.0.0.1",
+    "user" : "",
+    "password" : "",
+    "database" : ""
+  },
+  "sha256Secret": "dfczgegrby"
+
+
+}

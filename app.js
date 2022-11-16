@@ -3,11 +3,17 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const config = require('./config.json')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+app.knex = require('knex')({
+  client: 'pg',
+  connection:config.pgConnection,
+  pool: { min: 0, max: 40 }
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
