@@ -34,7 +34,7 @@ async function work() {
                 },
                 async (filename) => {
 
-                    await knex("t_22_trackTask").update({recUrlRu: ruFilename}).where({id: track[0].id})
+                    await knex("t_22_trackTask").update({recUrlRu: filename}).where({id: track[0].id})
                     createRecord(records[0].filename, "en", {offsetStart:formatTime(offsetStart),duration:formatTime(duration) },
                         async (filename )=>{
                             await knex("t_22_trackTask").update({recUrlEn:filename}).where({id:track[0].id})
