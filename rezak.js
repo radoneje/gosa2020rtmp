@@ -61,6 +61,7 @@ function formatTime(s) {
     return t.format("HH:mm:ss")
 }
 
+
 function createRecord(inFilename,rand, lang, time, onStop) {
     let outFilename = inFilename.replace(".mkv", "_"+rand+"_"+lang + ".mp4");
     let params = ["-ss", time.offsetStart, "-i", "/var/stream/" + inFilename, "-c:v", "copy", "-c:a", "aac", "-af", "pan=mono|c0=c" + (lang == "ru" ? 0 : 1), '-t', time.duration,"-movflags","+faststart", "-y", "/var/track/" + outFilename]
