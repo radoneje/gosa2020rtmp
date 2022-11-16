@@ -36,7 +36,7 @@ async function work(){
         }
     }
 
-    setTimeout(work,1000)
+   // setTimeout(work,1000)
 };
 function formatTime(s){
     let t=moment().startOf("day");
