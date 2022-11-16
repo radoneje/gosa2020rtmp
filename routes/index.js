@@ -16,10 +16,18 @@ router.post('/startStream', async function(req, res, next) {
     return res.send(404);
 
   res.json("ok")
-  setTimeout(()=>{
+  setTimeout(async ()=>{
     startRestreamToCDN(req.body.name,"ru", streams[0].id, req);
     startRestreamToCDN(req.body.name,"en", streams[0].id, req);
-    startRecord(req.body.name, streams[0].id, req);
+    await req.knex("t_22_streams").update({recStatus:new Date()}).where({id:streams[0].id});
+
+    let rec=await req.knex("t_22_records").insert({
+      startDate:new Date(),
+      startDateUnix:moment().unix(),
+      streamid:streams[0].id,
+      filename:req.body.filename
+    })
+    startRecord(req.body.name, streams[0].id, rec[0].id, req);
   },500)
 });
 
@@ -30,7 +38,7 @@ function startRestreamToCDN(key, lang, streamid, req){
     console.log(`ffmpeg close om ${key} ${lang}`);
   });
 }
-function startRecord(key, streamid, req){
+function startRecord(key, recordid, streamid, req){
   let filename=key+"_" +moment().unix()+".mkv"
   let params=["-re", "-i", "rtmp://localhost/live/"+key, "-c", "copy",  "-f", "matroska", "/var/video/"+filename ]
   let stream = spawn("ffmpeg", params , {detached: true});
@@ -39,6 +47,12 @@ function startRecord(key, streamid, req){
   });
   stream.on("close", async (code) => {
     console.log(`ffmpeg record close om  ${key} ${lang}`);
+    let rec=await req.knex("t_22_records").update({
+      endDate:new Date(),
+      endDateUnix:moment().unix(),
+      filename:req.body.filename
+    }, "*")
+        .where({id:recordid})
   });
 }
 
