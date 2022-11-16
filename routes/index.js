@@ -35,7 +35,7 @@ router.post('/startStream', async function(req, res, next) {
 function startRestreamToCDN(key, lang, streamid, req){
   //let params=["ffmpeg", "-re", "-i", "rtmp://localhost/live/"+key, "-c:v", "copy","-c:a", "aac", "-af", "pan=mono|c0=c"+(lang=="ru"?0:1), "-f", "flv", "rtmp://pub2.rtmp.s01.l.fabrikanews.cdnvideo.ru/fabrikanews4/"+key+lang+"?auth=20200s9FJSP2v2ASD3" ]
   let params=["/var/restream",key, lang]
-  let stream = spawn("/bin/bash", params , {detached: true,  stdio: [ 'ignore', 'ignore', 'ignore' ]});
+  let stream = spawn("/bin/bash", params , {detached: true, stdio: 'ignore'});
   //stream.on("close", async (code) => {
   //  console.log(`ffmpeg close om ${key} ${lang}`);
   //});
