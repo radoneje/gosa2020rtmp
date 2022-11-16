@@ -26,7 +26,7 @@ async function work(){
         if(records.length>0 && records[0].filename){
             let offsetStart=moment(task.startDate).unix()-records[0].startDateUnix;
             let duration=moment(task.endDate).unix()-moment(task.startDate).unix();
-            console.log({formatTime(offsetStart),formatTime(duration) });
+            console.log({offsetStart:formatTime(offsetStart),duration:formatTime(duration) });
             console.log(records[0].startDateUnix, moment(task.startDate).unix(),  moment(task.endDate).unix())
         }
     }
