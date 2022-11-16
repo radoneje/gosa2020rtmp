@@ -35,7 +35,7 @@ async function work(){
 };
 function formatTime(s){
     let t=moment().startOf("day");
-    t.add(a, "seconds")
+    t.add(s, "seconds")
     return t.format("HH:mm:ss")
 }
 
