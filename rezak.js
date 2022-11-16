@@ -28,6 +28,7 @@ async function work(){
             let duration=moment(task.endDate).unix()-moment(task.startDate).unix();
             console.log({offsetStart:formatTime(offsetStart),duration:formatTime(duration) });
             console.log(records[0].startDateUnix, moment(task.startDate).unix(),  moment(task.endDate).unix())
+            let ruFilename =createRecord(records[0].filename, "ru", {offsetStart:formatTime(offsetStart),duration:formatTime(duration) })
         }
     }
 
@@ -37,6 +38,11 @@ function formatTime(s){
     let t=moment().startOf("day");
     t.add(s, "seconds")
     return t.format("HH:mm:ss")
+}
+function createRecord(inFilename, lang, time){
+    let outFilename=inFilename.replace(".mkv", lang+".mp4");
+    let params=["-i", "/var/video/"+ inFilename,  "-c:v", "copy","-c:a", "aac", "-af", "pan=mono|c0=c"+(lang=="ru"?0:1), "/var/video/"+outFilename]
+    console.log(params)
 }
 
 work();
