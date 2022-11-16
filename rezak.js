@@ -11,6 +11,7 @@ let knex = require('knex')({
 });
 
 async function work() {
+    console.log("start work", moment().format("DD.MM.YYYY HH:mm:ss"))
     let tasks = await knex.select("*").from("t_22_trackTask").where({status: 0}).orderBy("id")
     if (tasks.length > 0) {
         let task = tasks[0];
