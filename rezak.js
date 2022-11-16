@@ -14,7 +14,7 @@ async function work() {
     let tasks = await knex.select("*").from("t_22_trackTask").where({status: 0}).orderBy("id")
     if (tasks.length > 0) {
         let task = tasks[0];
-        // await knex("t_22_trackTask").update({status:1}).where({id:task.id});
+        await knex("t_22_trackTask").update({status:1, startDate:new Date()}).where({id:task.id});
         let track = await knex.select("*").from("t_22_tracks").where({id: task.trackid});
         let stream = await knex.select("*").from("t_22_streams").where({id: track[0].streamid});
         let records = await knex.select("*").from("t_22_records")
@@ -38,6 +38,7 @@ async function work() {
                     createRecord(records[0].filename, "en", {offsetStart:formatTime(offsetStart),duration:formatTime(duration) },
                         async (filename )=>{
                             await knex("t_22_tracks").update({recUrlEn:filename}).where({id:track[0].id})
+                            await knex("t_22_trackTask").update({status:2, compliteDate:new Date()}).where({id:task.id});
                             setTimeout(work, 1000);
                     }
                     )
