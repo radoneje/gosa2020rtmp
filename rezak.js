@@ -34,10 +34,10 @@ async function work() {
                 },
                 async (filename) => {
 
-                    await knex("t_22_track").update({recUrlRu: filename}).where({id: track[0].id})
+                    await knex("t_22_tracks").update({recUrlRu: filename}).where({id: track[0].id})
                     createRecord(records[0].filename, "en", {offsetStart:formatTime(offsetStart),duration:formatTime(duration) },
                         async (filename )=>{
-                            await knex("t_22_track").update({recUrlEn:filename}).where({id:track[0].id})
+                            await knex("t_22_tracks").update({recUrlEn:filename}).where({id:track[0].id})
                             setTimeout(work, 1000);
                     }
                     )
