@@ -47,9 +47,9 @@ async function work() {
             )
 
         } else
-            setTimeout(work, 1000)
+            setTimeout(work, 30*1000)
     } else
-        setTimeout(work, 1000)
+        setTimeout(work, 30*1000)
 
     //
 };
