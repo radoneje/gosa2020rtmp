@@ -12,7 +12,7 @@ let knex = require('knex')({
 
 async function work(){
     let tasks=await knex.select("*").from("t_22_trackTask").where({status:0}).orderBy("id")
-    if(tasks.length>0){
+    if(tasks.length>0 ){
         let task=tasks[0];
        // await knex("t_22_trackTask").update({status:1}).where({id:task.id});
         let track= await knex.select("*").from("t_22_tracks").where({id:task.trackid});
@@ -23,6 +23,9 @@ async function work(){
             .orderBy("id","desc")
         ;
         console.log(records);
+        if(records.length>0 && records[0].filename){
+            console.log(records[0].startDateUnix, moment(task.startDate).unix(),  moment(task.endDate).unix())
+        }
     }
 
     setTimeout(work,1000)
