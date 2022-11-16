@@ -22,7 +22,18 @@ router.post('/startStream', async function(req, res, next) {
 function startRestreamToCDN(key){
   let params=["-re", "-i", "rtmp://localhost/live"+key, "-c:v", "copy","-c:a", "aac", "-af", "pan=mono|c0=c0", "-f", "flv", "rtmp://pub2.rtmp.s01.l.fabrikanews.cdnvideo.ru/fabrikanews4/"+key+"ru?auth=20200s9FJSP2v2ASD3" ]
   console.log(params)
-  //let stream = spawn("ffmpeg", params , {detached: true});
+  let stream = spawn("ffmpeg", params , {detached: true});
+  stream.stderr.on("data", data => {
+    console.log(`stderr: ${data}`);
+  });
+
+  stream.on("error", error => {
+    console.log(`error: ${error.message}`);
+  });
+
+  stream.on("close", code => {
+    console.log(`child process exited with code ${code}`);
+  });
 }
 
 module.exports = router;
