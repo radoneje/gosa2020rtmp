@@ -15,8 +15,8 @@ router.post('/startStream', async function(req, res, next) {
 
   res.json("ok")
   setTimeout(()=>{
-    startRestreamToCDN(req.body.name,"ru", stream[0].id, req);
-    startRestreamToCDN(req.body.name,"en", stream[0].id, req);
+    startRestreamToCDN(req.body.name,"ru", streams[0].id, req);
+    startRestreamToCDN(req.body.name,"en", streams[0].id, req);
   },500)
 });
 
