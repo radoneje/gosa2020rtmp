@@ -50,10 +50,10 @@ function createRecord(inFilename, lang, time, onStop){
     let stream = spawn("ffmpeg", params , {detached: true});
     stream.on("close", async (code) => {
         onStop(outFilename)
-        console.log(`ffmpeg close om ${key} ${lang}`);
+        console.log(`ffmpeg close om ${inFilename} ${lang}`);
     });
     stream.stderr.on("data", data => {
-        // console.log(`stderr: ${data}`);
+         console.log(`stderr: ${data}`);
     });
 }
 
