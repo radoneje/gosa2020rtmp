@@ -28,7 +28,11 @@ async function work(){
             let duration=moment(task.endDate).unix()-moment(task.startDate).unix();
             //console.log({offsetStart:formatTime(offsetStart),duration:formatTime(duration) });
             //console.log(records[0].startDateUnix, moment(task.startDate).unix(),  moment(task.endDate).unix())
-            let ruFilename =createRecord(records[0].filename, "ru", {offsetStart:formatTime(offsetStart),duration:formatTime(duration) })
+            createRecord(records[0].filename, "ru", {offsetStart:formatTime(offsetStart),duration:formatTime(duration) },
+                async (ruFilename )=>{
+                    console.log("ru rec created")
+                }
+                )
         }
     }
 
@@ -39,10 +43,18 @@ function formatTime(s){
     t.add(s, "seconds")
     return t.format("HH:mm:ss")
 }
-function createRecord(inFilename, lang, time){
+function createRecord(inFilename, lang, time, onStop){
     let outFilename=inFilename.replace(".mkv", lang+".mp4");
     let params=["-ss" ,time.offsetStart , "-i", "/var/video/"+ inFilename,  "-c:v", "copy","-c:a", "aac", "-af", "pan=mono|c0=c"+(lang=="ru"?0:1),'-t', time.duration,  "/var/video/"+outFilename]
     console.log(params)
+    let stream = spawn("ffmpeg", params , {detached: true});
+    stream.on("close", async (code) => {
+        onStop(outFilename)
+        console.log(`ffmpeg close om ${key} ${lang}`);
+    });
+    stream.stderr.on("data", data => {
+        // console.log(`stderr: ${data}`);
+    });
 }
 
 work();
