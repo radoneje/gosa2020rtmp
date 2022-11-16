@@ -61,8 +61,8 @@ function formatTime(s) {
 
 function createRecord(inFilename, lang, time, onStop) {
     let outFilename = inFilename.replace(".mkv", "_"+lang + ".mp4");
-    let params = ["-ss", time.offsetStart, "-i", "/var/video/" + inFilename, "-c:v", "copy", "-c:a", "aac", "-af", "pan=mono|c0=c" + (lang == "ru" ? 0 : 1), '-t', time.duration,"-movflags","+faststart", "-y", "/var/video/" + outFilename]
-    console.log(params)
+    let params = ["-ss", time.offsetStart, "-i", "/var/stream/" + inFilename, "-c:v", "copy", "-c:a", "aac", "-af", "pan=mono|c0=c" + (lang == "ru" ? 0 : 1), '-t', time.duration,"-movflags","+faststart", "-y", "/var/track/" + outFilename]
+    // console.log(params)
     let stream = spawn("ffmpeg", params, {detached: true});
     stream.on("close", async (code) => {
         onStop(outFilename)
