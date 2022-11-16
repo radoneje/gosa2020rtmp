@@ -29,7 +29,7 @@ async function work() {
             offsetStart=offsetStart-3;
             if(offsetStart<0)
                 offsetStart=0;
-            let duration = moment(task.endDate).unix() - moment(task.startDate).unix();
+            let duration = moment(task.endDate).unix() - moment(task.startDate).unix()+1;
             //console.log({offsetStart:formatTime(offsetStart),duration:formatTime(duration) });
             //console.log(records[0].startDateUnix, moment(task.startDate).unix(),  moment(task.endDate).unix())
             let rand=makeid(5);
