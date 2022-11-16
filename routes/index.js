@@ -5,5 +5,9 @@ var router = express.Router();
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
+router.post('/startStream', function(req, res, next) {
+  console.log("startStream", req.body)
+  res.json("ok")
+});
 
 module.exports = router;
