@@ -44,7 +44,7 @@ function startRecord(key, streamid, recordid, req){
   let params=["-re", "-i", "rtmp://localhost/live/"+key, "-c", "copy",  "-f", "matroska", "/var/video/"+filename ]
   let stream = spawn("ffmpeg", params , {detached: true});
   stream.stderr.on("data", data => {
-    console.log(`stderr: ${data}`);
+   // console.log(`stderr: ${data}`);
   });
   stream.on("close", async (code) => {
     console.log(`ffmpeg record close on  ${key} `);
