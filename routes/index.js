@@ -21,14 +21,14 @@ router.post('/startStream', async function(req, res, next) {
     startRestreamToCDN(req.body.name,"en", streams[0].id, req);
     await req.knex("t_22_streams").update({recStatus:new Date()}).where({id:streams[0].id});
 
-
-    let filename=startRecord(req.body.name, streams[0].id, rec[0].id, req);
     let rec=await req.knex("t_22_records").insert({
       startDate:new Date(),
       startDateUnix:moment().unix(),
       streamid:streams[0].id,
-      filename:filename
+
     }, "*")
+    let filename=startRecord(req.body.name, streams[0].id, rec[0].id, req);
+    await req.knex("t_22_records").update({filename:filename}).where({id:rec[0].id})
   },500)
 });
 
