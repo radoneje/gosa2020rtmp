@@ -38,7 +38,7 @@ function startRestreamToCDN(key, lang, streamid, req){
     console.log(`ffmpeg close om ${key} ${lang}`);
   });
 }
-function startRecord(key, recordid, streamid, req){
+function startRecord(key, streamid, recordid, req){
   let filename=key+"_" +moment().unix()+".mkv"
   let params=["-re", "-i", "rtmp://localhost/live/"+key, "-c", "copy",  "-f", "matroska", "/var/video/"+filename ]
   let stream = spawn("ffmpeg", params , {detached: true});
