@@ -43,6 +43,7 @@ function startRecord(key, streamid, recordid, req){
   let filename=key+"_" +moment().unix()+".mkv"
   let params=["-re", "-i", "rtmp://localhost/live/"+key, "-c", "copy",  "-f", "matroska", "/var/video/"+filename ]
   let stream = spawn("ffmpeg", params , {detached: true});
+  console.log("record started: "+ filename )
   stream.stderr.on("data", data => {
    // console.log(`stderr: ${data}`);
   });
