@@ -17,8 +17,11 @@ async function work(){
        // await knex("t_22_trackTask").update({status:1}).where({id:task.id});
         let track= await knex.select("*").from("t_22_tracks").where({id:task.trackid});
         let stream= await knex.select("*").from("t_22_streams").where({id:track[0].streamid});
-        let records = await knex.select("*").from("t_22_records").where({streamid:track[0].streamid,})
-            .andWhere("startDate", '<=', task.startDate);
+        let records = await knex.select("*").from("t_22_records")
+            .where({streamid:track[0].streamid,})
+            .andWhere("startDate", '<=', task.startDate)
+            .orderBy("id","desk")
+        ;
         console.log(records);
     }
 
