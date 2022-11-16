@@ -29,14 +29,15 @@ async function work() {
             let duration = moment(task.endDate).unix() - moment(task.startDate).unix();
             //console.log({offsetStart:formatTime(offsetStart),duration:formatTime(duration) });
             //console.log(records[0].startDateUnix, moment(task.startDate).unix(),  moment(task.endDate).unix())
-            createRecord(records[0].filename, "ru", {
+            let rand=makeid(5);
+            createRecord(records[0].filename,rand, "ru", {
                     offsetStart: formatTime(offsetStart),
                     duration: formatTime(duration)
                 },
                 async (filename) => {
 
                     await knex("t_22_tracks").update({recUrlRu: filename}).where({id: track[0].id})
-                    createRecord(records[0].filename, "en", {offsetStart:formatTime(offsetStart),duration:formatTime(duration) },
+                    createRecord(records[0].filename,rand, "en", {offsetStart:formatTime(offsetStart),duration:formatTime(duration) },
                         async (filename )=>{
                             await knex("t_22_tracks").update({recUrlEn:filename}).where({id:track[0].id})
                             await knex("t_22_trackTask").update({status:2, compliteDate:new Date()}).where({id:task.id});
@@ -60,8 +61,8 @@ function formatTime(s) {
     return t.format("HH:mm:ss")
 }
 
-function createRecord(inFilename, lang, time, onStop) {
-    let outFilename = inFilename.replace(".mkv", "_"+lang + ".mp4");
+function createRecord(inFilename,rand, lang, time, onStop) {
+    let outFilename = inFilename.replace(".mkv", "_"+rand+"_"+lang + ".mp4");
     let params = ["-ss", time.offsetStart, "-i", "/var/stream/" + inFilename, "-c:v", "copy", "-c:a", "aac", "-af", "pan=mono|c0=c" + (lang == "ru" ? 0 : 1), '-t', time.duration,"-movflags","+faststart", "-y", "/var/track/" + outFilename]
     // console.log(params)
     let stream = spawn("ffmpeg", params, {detached: true});
@@ -72,6 +73,15 @@ function createRecord(inFilename, lang, time, onStop) {
     stream.stderr.on("data", data => {
         console.log(`stderr: ${data}`);
     });
+}
+function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
 }
 
 work();
