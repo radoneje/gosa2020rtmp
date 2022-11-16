@@ -26,6 +26,9 @@ async function work() {
         // console.log(records);
         if (records.length > 0 && records[0].filename) {
             let offsetStart = moment(task.startDate).unix() - records[0].startDateUnix;
+            offsetStart=offsetStart-3;
+            if(offsetStart<0)
+                offsetStart=0;
             let duration = moment(task.endDate).unix() - moment(task.startDate).unix();
             //console.log({offsetStart:formatTime(offsetStart),duration:formatTime(duration) });
             //console.log(records[0].startDateUnix, moment(task.startDate).unix(),  moment(task.endDate).unix())
@@ -64,6 +67,7 @@ function formatTime(s) {
 
 function createRecord(inFilename,rand, lang, time, onStop) {
     let outFilename = inFilename.replace(".mkv", "_"+rand+"_"+lang + ".mp4");
+
     let params = ["-ss", time.offsetStart, "-i", "/var/stream/" + inFilename, "-c:v", "copy", "-c:a", "aac", "-af", "pan=mono|c0=c" + (lang == "ru" ? 0 : 1), '-t', time.duration,"-movflags","+faststart", "-y", "/var/track/" + outFilename]
     // console.log(params)
     let stream = spawn("ffmpeg", params, {detached: true});
