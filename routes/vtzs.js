@@ -19,10 +19,10 @@ function startRestreamToHLS(key, lang, req){
   stream.on("close", async (code) => {
     console.log(`ffmpeg close om ${key} ${lang}`);
   });
-  stream.stderr.on("data", data => {
-    console.log(`stderr: ${data}`);
-  });
-  //stream.unref();
+  //stream.stderr.on("data", data => {
+   // console.log(`stderr: ${data}`);
+  //});
+  stream.unref();
 }
 
 module.exports = router;
