@@ -14,7 +14,10 @@ router.post('/startStream', async function(req, res, next) {
 });
 
 function startRestreamToHLS(key, lang, req){
-  let params=[ "-re", "-i", "rtmp://localhost/live/"+key, "-c:v", "copy","-c:a", "aac", "-af", "pan=mono|c0=c"+(lang=="ru"?0:1), "-f", "flv", "rtmp://localhost/stream/"+key+lang ]
+  let ch=0;
+  if(lang=="en")
+    ch=1;
+  let params=[ "-re", "-i", "rtmp://localhost/live/"+key, "-c:v", "copy","-c:a", "aac", "-af", "pan=mono|c0=c"+ch, "-f", "flv", "rtmp://localhost/stream/"+key+lang ]
   //let params=["-m","/var/restream",key, lang, (lang=="ru"?0:1)]
   let stream = spawn("ffmpeg", params , {detached: true, stdio: 'ignore'});
   stream.on("close", async (code) => {
