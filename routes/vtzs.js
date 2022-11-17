@@ -8,6 +8,7 @@ router.post('/startStream', async function(req, res, next) {
   setTimeout(()=>{
 
     startRestreamToHLS(req.body.name,"ru", req);
+    startRestreamToHLS(req.body.name,"en", req);
   },500)
   res.json(1)
 });
