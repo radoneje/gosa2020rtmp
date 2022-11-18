@@ -20,7 +20,7 @@ async function work() {
         let stream = await knex.select("*").from("t_22_streams").where({id: track[0].streamid});
         let records = await knex.select("*").from("t_22_records")
             .where({streamid: track[0].streamid,})
-            .andWhere("startDate", '<=', task.startDate)
+            //.andWhere("startDate", '<=', task.startDate)
             .orderBy("id", "desc")
         ;
         console.log(records);
