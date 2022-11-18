@@ -63,7 +63,7 @@ async function startRecord(key, streamid, recordid, req){
     let rec=await req.knex("t_22_records").update({
       //endDate:new Date(),
       //endDateUnix:moment().unix(),
-      filename:req.body.filename
+      filename:filename
     }, "*")
         .where({id:recordid})
   //});
