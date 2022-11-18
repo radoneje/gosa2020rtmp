@@ -20,7 +20,7 @@ async function work() {
         let stream = await knex.select("*").from("t_22_streams").where({id: track[0].streamid});
         let records = await knex.select("*").from("t_22_records")
             .where({streamid: track[0].streamid,})
-            //.andWhere("startDate", '<=', task.startDate)
+            .andWhere("startDate", '<=', task.startDate)
             .orderBy("id", "desc")
         ;
         console.log(records);
@@ -46,19 +46,61 @@ async function work() {
                             await knex("t_22_tracks").update({recUrlEn:filename}).where({id:track[0].id})
                             await knex("t_22_trackTask").update({status:2, compliteDate:new Date()}).where({id:task.id});
                             console.log("rec en update", {recUrlEn:filename})
-                            setTimeout(work, 1000);
+                            await workSpeeches()
                     }
                     )
                 }
             )
 
         } else
-            setTimeout(work, 30*1000)
+            await workSpeeches()
     } else
-        setTimeout(work, 30*1000)
+        await workSpeeches()
 
     //
 };
+async function workSpeeches(){
+    let tasks = await knex.select("*").from("t_22_speechTask").where({status: 0}).orderBy("id")
+    if (tasks.length > 0) {
+        let task = tasks[0];
+        await knex("t_22_speechTask").update({status: 1, startDate: new Date()}).where({id: task.id});
+        let speech = await knex.select("*").from("t_22_speaches").where({id: task.trackid});
+        let track = await knex.select("*").from("t_22_tracks").where({id: speech[0].trackid});
+        let stream = await knex.select("*").from("t_22_streams").where({id: track[0].streamid});
+        let records = await knex.select("*").from("t_22_records")
+            .where({streamid: track[0].streamid,})
+            .andWhere("startDate", '<=', task.startDate)
+            .orderBy("id", "desc")
+        if (records.length > 0 && records[0].filename) {
+            let offsetStart = moment(task.startDate).unix() - records[0].startDateUnix;
+            offsetStart=offsetStart-3;
+            if(offsetStart<0)
+                offsetStart=0;
+            let duration = moment(task.endDate).unix() - moment(task.startDate).unix()+1;
+            let rand=makeid(5);
+            createRecord(records[0].filename,rand, "ru", {
+                    offsetStart: formatTime(offsetStart),
+                    duration: formatTime(duration)
+                },
+                async (filename) => {
+                    await knex("t_22_speaches").update({recUrlRu: filename}).where({id: speech[0].id})
+                    createRecord(records[0].filename,rand, "en", {offsetStart:formatTime(offsetStart),duration:formatTime(duration) },
+                        async (filename )=>{
+                            await knex("t_22_speaches").update({recUrlEn:filename}).where({id:speech[0].id})
+                            await knex("t_22_speechTask").update({status:2, compliteDate:new Date()}).where({id:task.id});
+                            console.log("rec speeech en update", {recUrlEn:filename})
+                            await workSpeeches()
+                        }
+                    )
+                });
+
+        }
+        else
+            setTimeout(work, 30*1000)
+    }
+    else
+        setTimeout(work, 30*1000)
+}
 
 function formatTime(s) {
     let t = moment().startOf("day");
