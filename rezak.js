@@ -64,7 +64,7 @@ async function workSpeeches(){
     if (tasks.length > 0) {
         let task = tasks[0];
         await knex("t_22_speechTask").update({status: 1, startDate: new Date()}).where({id: task.id});
-        let speech = await knex.select("*").from("t_22_speaches").where({id: task.trackid});
+        let speech = await knex.select("*").from("t_22_speaches").where({id: task.speechid});
         let track = await knex.select("*").from("t_22_tracks").where({id: speech[0].trackid});
         let stream = await knex.select("*").from("t_22_streams").where({id: track[0].streamid});
         let records = await knex.select("*").from("t_22_records")
