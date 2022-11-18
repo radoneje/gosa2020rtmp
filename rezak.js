@@ -23,7 +23,7 @@ async function work() {
             .andWhere("startDate", '<=', task.startDate)
             .orderBy("id", "desc")
         ;
-        // console.log(records);
+        console.log(records);
         if (records.length > 0 && records[0].filename) {
             let offsetStart = moment(task.startDate).unix() - records[0].startDateUnix;
             offsetStart=offsetStart-3;
@@ -40,10 +40,12 @@ async function work() {
                 async (filename) => {
 
                     await knex("t_22_tracks").update({recUrlRu: filename}).where({id: track[0].id})
+                    console.log("rec en update", {recUrlRu:filename})
                     createRecord(records[0].filename,rand, "en", {offsetStart:formatTime(offsetStart),duration:formatTime(duration) },
                         async (filename )=>{
                             await knex("t_22_tracks").update({recUrlEn:filename}).where({id:track[0].id})
                             await knex("t_22_trackTask").update({status:2, compliteDate:new Date()}).where({id:task.id});
+                            console.log("rec en update", {recUrlEn:filename})
                             setTimeout(work, 1000);
                     }
                     )
