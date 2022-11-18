@@ -57,8 +57,8 @@ async function startRecord(key, streamid, recordid, req){
  // stream.on("close", async (code) => {
     console.log(`ffmpeg record close on  ${key} `);
     let rec=await req.knex("t_22_records").update({
-      endDate:new Date(),
-      endDateUnix:moment().unix(),
+      //endDate:new Date(),
+      //endDateUnix:moment().unix(),
       filename:req.body.filename
     }, "*")
         .where({id:recordid})
