@@ -36,7 +36,7 @@ function startRestreamToCDN(key, lang, streamid, req){
   let ch=0;
   if(lang=="en")
     ch=1;
-  let params=[ "-re", "-i", "rtmp://localhost/live/"+key, "-c:v", "copy","-c:a", "aac", "-af", "pan=mono|c0=c"+ch), "-f", "flv", "rtmp://pub2.rtmp.s01.l.fabrikanews.cdnvideo.ru/fabrikanews4/"+key+lang+"?auth=20200s9FJSP2v2ASD3" ]
+  let params=[ "-re", "-i", "rtmp://localhost/live/"+key, "-c:v", "copy","-c:a", "aac", "-af", "pan=mono|c0=c"+ch, "-f", "flv", "rtmp://pub2.rtmp.s01.l.fabrikanews.cdnvideo.ru/fabrikanews4/"+key+lang+"?auth=20200s9FJSP2v2ASD3" ]
 
   //let params=["-m","/var/restream",key, lang, (lang=="ru"?0:1)]
   let stream = spawn("ffmpeg", params , {detached: true, stdio: 'ignore'});
