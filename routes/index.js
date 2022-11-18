@@ -51,6 +51,7 @@ async function startRecord(key, streamid, recordid, req){
   //let params=["-re", "-i", "rtmp://localhost/live/"+key, "-c", "copy",  "-f", "matroska", "/var/video/"+filename ]
   let params=["-re", "-i", "rtmp://localhost/live/"+key, "-c", "copy",  "-f", "mpegts", "/var/video/"+filename ]
 
+
   let stream = spawn("ffmpeg", params , {detached: true, stdio: 'ignore'});
   console.log("record started: "+ filename )
   stream.unref();
