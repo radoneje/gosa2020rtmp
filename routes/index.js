@@ -27,7 +27,7 @@ router.post('/startStream', async function(req, res, next) {
       streamid:streams[0].id,
 
     }, "*")
-    let filename=startRecord(req.body.name, streams[0].id, rec[0].id, req);
+    let filename=await startRecord(req.body.name, streams[0].id, rec[0].id, req);
     await req.knex("t_22_records").update({filename:filename}).where({id:rec[0].id})
   },500)
 });
@@ -45,15 +45,16 @@ function startRestreamToCDN(key, lang, streamid, req){
   //});
   stream.unref();
 }
-function startRecord(key, streamid, recordid, req){
+async function startRecord(key, streamid, recordid, req){
   let filename=key+"_" +moment().unix()+".mkv"
   let params=["-re", "-i", "rtmp://localhost/live/"+key, "-c", "copy",  "-f", "matroska", "/var/video/"+filename ]
-  let stream = spawn("ffmpeg", params , {detached: true});
+  let stream = spawn("ffmpeg", params , {detached: true, stdio: 'ignore'});
   console.log("record started: "+ filename )
+  stream.unref();
   //stream.stderr.on("data", data => {
    // console.log(`stderr: ${data}`);
   //});
-  stream.on("close", async (code) => {
+ // stream.on("close", async (code) => {
     console.log(`ffmpeg record close on  ${key} `);
     let rec=await req.knex("t_22_records").update({
       endDate:new Date(),
@@ -61,7 +62,7 @@ function startRecord(key, streamid, recordid, req){
       filename:req.body.filename
     }, "*")
         .where({id:recordid})
-  });
+  //});
   return filename;
 }
 
