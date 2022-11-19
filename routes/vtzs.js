@@ -12,7 +12,7 @@ router.post('/startStream', async function(req, res, next) {
     setTimeout(()=>{
       startRestreamToNgenix(req.body.name,"ru", req);
      // startRestreamToNgenix(req.body.name,"en", req);
-    },1000)
+    },5000)
 
   },500)
   res.json(1)
