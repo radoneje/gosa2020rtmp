@@ -27,7 +27,7 @@ function startRestreamToNgenix(key, lang, req){
     ch=1;
   let params=[ "-re", "-i", "rtmp://localhost/stream/"+key+lang, "-c", "copy", "-f", "flv", "rtmp://s36335-media-origin1.cdn.ngenix.net:1935/s36335-media-origin/live/"+key+lang+"?password=7fstvAaMXdsr" ]
   console.log(params)
-  let stream = spawn("ffmpeg", params ,{detached: true/*, stdio: 'ignore'*/});
+  let stream = spawn("ffmpeg", params ,{detached: true, stdio: 'ignore'});
  // stream.stderr.on("data", data => {
   //   console.log(`stderr: ${data}`);
   //  });
