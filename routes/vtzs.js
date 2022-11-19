@@ -20,6 +20,9 @@ function startRestreamToNgenix(key, lang, req){
   if(lang=="en")
     ch=1;
   let params=[ "-re", "-i", "rtmp://localhost/live/"+key, "-c:v", "copy","-c:a", "aac", "-af", "pan=mono|c0=c"+ch, "-f", "flv", "rtmp://s36335-media-origin1.cdn.ngenix.net:1935/s36335-media-origin/live/"+key+lang+"?password=7fstvAaMXdsr" ]
+  let stream = spawn("ffmpeg", params , {detached: true, stdio: 'ignore'});
+  stream.unref();
+
 }
 function startRestreamToHLS(key, lang, req){
   let ch=0;
