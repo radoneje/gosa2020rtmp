@@ -10,8 +10,8 @@ router.post('/startStream', async function(req, res, next) {
     setTimeout(()=>{ startRestreamToHLS(req.body.name,"ru", req);},2000)
     setTimeout(()=>{ startRestreamToHLS(req.body.name,"en", req);},40000)
     setTimeout(()=>{
-      setTimeout(()=>{ startRestreamToNgenix(req.body.name,"ru", req);},15000)
-      setTimeout(()=>{ startRestreamToNgenix(req.body.name,"en", req);},20000)
+      setTimeout(()=>{ startRestreamToNgenix(req.body.name,"ru", req);},20000)
+      setTimeout(()=>{ startRestreamToNgenix(req.body.name,"en", req);},30000)
 
     },5000)
 
