@@ -28,8 +28,9 @@ router.post('/startStream', async function(req, res, next) {
 
     }, "*")
     setTimeout(async ()=>{
-      await req.knex("t_22_records").update({filename:filename}).where({id:rec[0].id})
       let filename=await startRecord(req.body.name, streams[0].id, rec[0].id, req);
+      await req.knex("t_22_records").update({filename:filename}).where({id:rec[0].id})
+
       },2000);
 
   },2000)
