@@ -16,6 +16,8 @@ router.post('/startStream', async function(req, res, next) {
 });
 
 function startRestreamToNgenix(key, lang, req){
+
+  console.log("startRestreamToNgenix", key, lang)
   let ch=0;
   if(lang=="en")
     ch=1;
