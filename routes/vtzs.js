@@ -10,10 +10,10 @@ router.post('/startStream', async function(req, res, next) {
     setTimeout(()=>{ startRestreamToHLS(req.body.name,"ru", req);},2000)
     setTimeout(()=>{ startRestreamToHLS(req.body.name,"en", req);},40000)
     setTimeout(()=>{
-      setTimeout(()=>{ startRestreamToNgenix(req.body.name,"ru", req);},5000)
-      setTimeout(()=>{ startRestreamToNgenix(req.body.name,"en", req);},10000)
+      setTimeout(()=>{ startRestreamToNgenix(req.body.name,"ru", req);},15000)
+      setTimeout(()=>{ startRestreamToNgenix(req.body.name,"en", req);},20000)
 
-    },20000)
+    },5000)
 
   },5000)
   res.json(1)
@@ -26,11 +26,11 @@ function startRestreamToNgenix(key, lang, req){
   if(lang=="en")
     ch=1;
   let params=[ "-re", "-i", "rtmp://localhost/stream/"+key+lang, "-c", "copy", "-f", "flv", "rtmp://s36335-media-origin1.cdn.ngenix.net:1935/s36335-media-origin/live/"+key+lang+"?password=7fstvAaMXdsr" ]
-  //console.log(params)
-  let stream = spawn("ffmpeg", params ,{detached: true, stdio: 'ignore'});
-  /*stream.stderr.on("data", data => {
-     console.log(`stderr: ${data}`);
-    });*/
+  console.log(params)
+  let stream = spawn("ffmpeg", params ,{detached: true/*, stdio: 'ignore'*/});
+ // stream.stderr.on("data", data => {
+  //   console.log(`stderr: ${data}`);
+  //  });
   stream.unref();
 
 }
