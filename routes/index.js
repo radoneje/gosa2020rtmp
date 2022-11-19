@@ -27,9 +27,12 @@ router.post('/startStream', async function(req, res, next) {
       streamid:streams[0].id,
 
     }, "*")
-    let filename=await startRecord(req.body.name, streams[0].id, rec[0].id, req);
-    await req.knex("t_22_records").update({filename:filename}).where({id:rec[0].id})
-  },500)
+    setTimeout(async ()=>{
+      await req.knex("t_22_records").update({filename:filename}).where({id:rec[0].id})
+      let filename=await startRecord(req.body.name, streams[0].id, rec[0].id, req);
+      },2000);
+
+  },2000)
 });
 
 function startRestreamToCDN(key, lang, streamid, req){
