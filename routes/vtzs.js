@@ -12,9 +12,9 @@ router.post('/startStream', async function(req, res, next) {
     setTimeout(()=>{
       startRestreamToNgenix(req.body.name,"ru", req);
      // startRestreamToNgenix(req.body.name,"en", req);
-    },5000)
+    },10000)
 
-  },500)
+  },5000)
   res.json(1)
 });
 
@@ -25,12 +25,12 @@ function startRestreamToNgenix(key, lang, req){
   if(lang=="en")
     ch=1;
   let params=[ "-re", "-i", "rtmp://localhost/stream/"+key+lang, "-c", "copy", "-f", "flv", "rtmp://s36335-media-origin1.cdn.ngenix.net:1935/s36335-media-origin/live/"+key+lang+"?password=7fstvAaMXdsr" ]
-  console.log(params)
-  let stream = spawn("ffmpeg", params ,/* {detached: true, stdio: 'ignore'}*/);
-  stream.stderr.on("data", data => {
+  //console.log(params)
+  let stream = spawn("ffmpeg", params ,{detached: true, stdio: 'ignore'});
+  /*stream.stderr.on("data", data => {
      console.log(`stderr: ${data}`);
-    });
-  //stream.unref();
+    });*/
+  stream.unref();
 
 }
 function startRestreamToHLS(key, lang, req){
