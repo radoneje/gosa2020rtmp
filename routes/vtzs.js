@@ -13,7 +13,7 @@ router.post('/startStream', async function(req, res, next) {
       setTimeout(()=>{ startRestreamToNgenix(req.body.name,"ru", req);},10000)
       setTimeout(()=>{ startRestreamToNgenix(req.body.name,"en", req);},20000)
 
-    },10000)
+    },20000)
 
   },5000)
   res.json(1)
@@ -25,7 +25,9 @@ function startRestreamToNgenix(key, lang, req){
   let ch=0;
   if(lang=="en")
     ch=1;
-  let params=[ "-re", "-i", "rtmp://localhost/stream/"+key+lang, "-c", "copy", "-f", "flv", "rtmp://s36335-media-origin1.cdn.ngenix.net:1935/s36335-media-origin/live/"+key+lang+"?password=7fstvAaMXdsr" ]
+  //let params=[ "-re", "-i", "rtmp://localhost/stream/"+key+lang, "-c", "copy", "-f", "flv", "rtmp://s36335-media-origin1.cdn.ngenix.net:1935/s36335-media-origin/live/"+key+lang+"?password=7fstvAaMXdsr" ]
+  // http://vtzs.rustv.ru/hls/1ru.m3u8
+  params=[ "-re", "-i", "http://vtzs.rustv.ru/hls/"+key+lang, "-c", "copy", "-f", "flv", "rtmp://s36335-media-origin1.cdn.ngenix.net:1935/s36335-media-origin/live/"+key+lang+"?password=7fstvAaMXdsr" ]
   console.log(params)
   let stream = spawn("ffmpeg", params ,{detached: true, stdio: 'ignore'});
  // stream.stderr.on("data", data => {
