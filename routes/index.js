@@ -123,8 +123,10 @@ router.post('/startStream', async function(req, res, next) {
 
   res.json("ok")
   setTimeout(async ()=>{
-   // startRestreamToCDN(req.body.name,"ru", streams[0].id, req);
-   // startRestreamToCDN(req.body.name,"en", streams[0].id, req);
+    if(req.body.name!=1) {
+      startRestreamToCDN(req.body.name, "ru", streams[0].id, req);
+      startRestreamToCDN(req.body.name, "en", streams[0].id, req);
+    }
     await req.knex("t_22_streams").update({recStatus:new Date()}).where({id:streams[0].id});
 
     let rec=await req.knex("t_22_records").insert({
