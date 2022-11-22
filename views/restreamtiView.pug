@@ -62,11 +62,11 @@ block content
       .rlabel куда:
       div
         .smallBtnRow
-          .smallBtn(v-in:click="dest='rtmp://a.rtmp.youtube.com/live2/'") YT
-          .smallBtn(v-in:click="dest='rtmp://ovsu.mycdn.me/input/'") VK
-          .smallBtn(v-in:click="dest='rtmp://ovsu.mycdn.me/input/'") OK
-          .smallBtn(v-in:click="dest='rtmp://upload.rutube.ru/live_push/'") RuTube
-          .smallBtn(v-in:click="dest='rtmps://dc4-1.rtmp.t.me/s/'") TG
+          .smallBtn(v-on:click="dest='rtmp://a.rtmp.youtube.com/live2/'") YT
+          .smallBtn(v-on:click="dest='rtmp://ovsu.mycdn.me/input/'") VK
+          .smallBtn(v-on:click="dest='rtmp://ovsu.mycdn.me/input/'") OK
+          .smallBtn(v-on:click="dest='rtmp://upload.rutube.ru/live_push/'") RuTube
+          .smallBtn(v-on:click="dest='rtmps://dc4-1.rtmp.t.me/s/'") TG
         input.dst(v-model="dest")
       .rlabel качество:
       select(v-model="q")
