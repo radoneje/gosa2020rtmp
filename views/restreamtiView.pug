@@ -4,7 +4,7 @@ block content
   style.
     .restreamRow, .psItem{
       display: flex;
-      align-items: center;
+      align-items:flex-end;
       justify-content: left;
     }
     .dst{
@@ -37,20 +37,37 @@ block content
     .psItem{
       margin-bottom: 8px;
     }
+    .smallBtnRow{
+      display: flex;
+    }
+    .smallBtn{
+      padding: 4px;
+      cursor: pointer;
+      background: lightgray;
+    }
   h1= title
   #app
     .restreamRow(v-if="ps.length<6 ")
       .rlabel откуда:
-      select(v-model="src")
-        option 1ru
-        option 1en
-        option 2ru
-        option 2en
-        option 3ru
-        option 3en
+      div
+
+        select(v-model="src")
+          option 1ru
+          option 1en
+          option 2ru
+          option 2en
+          option 3ru
+          option 3en
       div &nbsp;&nbsp;
       .rlabel куда:
-      input.dst(v-model="dest")
+      div
+        .smallBtnRow
+          .smallBtn(v-in:click="dest='rtmp://a.rtmp.youtube.com/live2/'") YT
+          .smallBtn(v-in:click="dest='rtmp://ovsu.mycdn.me/input/'") VK
+          .smallBtn(v-in:click="dest='rtmp://ovsu.mycdn.me/input/'") OK
+          .smallBtn(v-in:click="dest='rtmp://upload.rutube.ru/live_push/'") RuTube
+          .smallBtn(v-in:click="dest='rtmps://dc4-1.rtmp.t.me/s/'") TG
+        input.dst(v-model="dest")
     .restreamRow(v-else)
       .rlabel  количество рестимов огрничено
     .btn(v-if="checkDest()" v-on:click="start()") запустить
