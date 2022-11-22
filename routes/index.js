@@ -94,7 +94,7 @@ router.get('/ps', function(req, res, next) {
 
 router.post('/restsream', function(req, res, next) {
 //https://s36335.cdn.ngenix.net/s36335-media-origin/live/<Stream_name>/index.m3u8
-  let params=[ "-re", "-i", "https://s36335.cdn.ngenix.net/s36335-media-origin/live/"+req.body.src+"/index.m3u8", "-c", "copy", "-f", "flv", req.body.dest ]
+  let params=[ "-re", "-i", "https://hls-fabrikanews.cdnvideo.ru/fabrikanews4/"+req.body.src+"/playlist.m3u8", "-c", "copy", "-f", "flv", req.body.dest ]
   console.log(params)
 
 
