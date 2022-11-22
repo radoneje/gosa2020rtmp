@@ -78,10 +78,12 @@ router.get('/ps', function(req, res, next) {
     })
     let proc=[];
     ret.forEach(r=>{
-      proc.push({
-        pid:r.match(/^(\d+)+/)[1],
-        url:r.match(/\-f flv(.+)/)[1]
-      })
+      try {
+        proc.push({
+          pid: r.match(/^(\d+)+/)[1],
+          url: r.match(/\-f flv(.+)/)[1]
+        })
+      }catch(e){}
     })
 
     res.json({cpu:cpu(),ps:proc})
