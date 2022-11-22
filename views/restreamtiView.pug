@@ -68,6 +68,14 @@ block content
           .smallBtn(v-in:click="dest='rtmp://upload.rutube.ru/live_push/'") RuTube
           .smallBtn(v-in:click="dest='rtmps://dc4-1.rtmp.t.me/s/'") TG
         input.dst(v-model="dest")
+        .rlabel качество:
+        select(v-model="q")
+          option(value="") Оригинал
+          option _1080p
+          option _720p
+          option _480p
+
+
     .restreamRow(v-else)
       .rlabel  количество рестимов огрничено
     .btn(v-if="checkDest()" v-on:click="start()") запустить
@@ -85,7 +93,8 @@ block content
         src:null,
         dest:"",
         ps:[],
-        cpu:0
+        cpu:0,
+        q:""
       },
       methods:{
         stopProc: async function (pid) {
@@ -106,7 +115,7 @@ block content
           setTimeout(this.getPsWork,5000)
         },
         start:async function(){
-            await axios.post("/restsream", {src:this.src, dest:this.dest});
+            await axios.post("/restsream", {src:this.src, dest:this.dest, q:this.q});
             this.src=null;
             this.dest= null;
             await this.getPs();
