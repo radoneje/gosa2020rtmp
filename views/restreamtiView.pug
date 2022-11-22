@@ -2,7 +2,7 @@ extends layout
 
 block content
   style.
-    .restreamRow{
+    .restreamRow, .psItem{
       display: flex;
       align-items: center;
       justify-content: left;
@@ -19,8 +19,22 @@ block content
       padding: 8px;
       margin: 8px 0;
     }
+
     .btn:hover{
       background: green;
+    }
+    .psItemStop{
+      background: red;
+      margin-left: 8px;
+    }
+    .psItemStop:hover{
+      background: darkred;
+    }
+    .psBox{
+      margin-top:20px
+    }
+    .psItem{
+      margin-bottom: 8px;
     }
   h1= title
   #app
@@ -37,7 +51,11 @@ block content
       .rlabel куда:
       input.dst(v-model="dest")
     .btn(v-if="checkDest()" v-on:click="start()") запустить
-
+    .psBox
+      .psItem(v-for="item in ps")
+        .psItemTitle {{item.url}}
+        .psItemStop.btn(v-on:click="stopProc(item.pid)") Стоп
+    .cpuBox CPU Usage (%): {{cpu}}
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
   script.
@@ -45,13 +63,33 @@ block content
       el:"#app",
       data:{
         src:null,
-        dest:null
+        dest:"rtmp://ovsu.mycdn.me/input/4789042097010_2986901375602_7xmxtz2cha",
+        ps:[],
+        cpu:0
       },
       methods:{
+        stopProc: async function (pid) {
+          if(confirm("Уверен?" )) {
+            await axios.post("/ps", {pid})
+            await this.getPs();
+
+          }
+        },
+        getPs:async function(){
+          let data=(await axios.get("/ps")).data;
+          this.ps=data.ps;
+          this.cpu=data.cpu
+        },
+        getPsWork: async function () {
+          console.log("getPsWork")
+          await this.getPs();
+          setTimeout(this.getPsWork,5000)
+        },
         start:async function(){
             await axios.post("/restsream", {src:this.src, dest:this.dest});
             this.src=null;
             this.dest= null;
+            await this.getPs();
         },
         checkDest:function() {
           if(!this.src)
@@ -64,7 +102,9 @@ block content
 
         }
       },
-      mounred:function (){
+      mounted:function (){
         console.log("vue ready")
+        this.getPsWork();
+
       }
     })

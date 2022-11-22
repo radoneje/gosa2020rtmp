@@ -12,6 +12,40 @@ router.get('/reststream', function(req, res, next) {
 
   res.render("restreamtiView")
 });
+router.post('/ps', function(req, res, next) {
+  let params=[];
+  params.push(req.body.pid );
+  //params.push("-9")
+
+  let ps = spawn("kill", params );
+  ps.on("close", async (code) => {
+    res.json(req.body.pid)
+  })
+
+});
+function cpu(){
+
+  const os = require('os');
+
+// Take the first CPU, considering every CPUs have the same specs
+// and every NodeJS process only uses one at a time.
+  const cpus = os.cpus();
+  const cpu = cpus[0];
+
+// Accumulate every CPU times values
+  const total = Object.values(cpu.times).reduce(
+      (acc, tv) => acc + tv, 0
+  );
+
+// Normalize the one returned by process.cpuUsage()
+// (microseconds VS miliseconds)
+  const usage = process.cpuUsage();
+  const currentCPUUsage = (usage.user + usage.system) * 1000;
+
+// Find out the percentage used for this specific CPU
+  const perc = currentCPUUsage / total * 100;
+return perc;
+}
 router.get('/ps', function(req, res, next) {
   let params=[ "-ax" ]
   let ps = spawn("ps", params );
@@ -22,12 +56,19 @@ router.get('/ps', function(req, res, next) {
   });
   ps.stdout.on("data", data => {
   //  console.log(`stdout: ${data}`);
-    ret.push((data + "").split("\n"))
-    console.log(data);
+  // console.log("1 ", );
+    let rows=(data+"").split("\n")
+    rows.forEach(r=>{
+      ret.push(r)
+    })
+
+
   });
   ps.on("close", async (code) => {
+    console.log("2");
+   // ret.push((data + "").split("\n"))
     ret=ret.filter(r=>{
-
+      console.log(r);
       try {
         return r.match(/ffmpeg/)
       }
@@ -35,8 +76,15 @@ router.get('/ps', function(req, res, next) {
         return false
       }
     })
+    let proc=[];
+    ret.forEach(r=>{
+      proc.push({
+        pid:r.match(/^(\d+)+/)[1],
+        url:r.match(/\-f flv(.+)/)[1]
+      })
+    })
 
-    res.json(ret)
+    res.json({cpu:cpu(),ps:proc})
   });
 
 
@@ -49,7 +97,7 @@ router.post('/restsream', function(req, res, next) {
 
 
   let debug= {detached: true, stdio: 'ignore'}
-  debug={}
+  //debug={}
 
   let stream = spawn("ffmpeg", params, debug );
   console.log("restream started: "+ req.body.dest )
