@@ -80,7 +80,7 @@ router.get('/ps', function(req, res, next) {
     ret.forEach(r=>{
       try {
         proc.push({
-          pid: r.match(/^(\d+)+/)[1],
+          pid: r.match(/(\d+)+/)[1],
           url: r.match(/\-f flv(.+)/)[1]
         })
       }catch(e){}
