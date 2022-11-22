@@ -39,7 +39,7 @@ block content
     }
   h1= title
   #app
-    .restreamRow
+    .restreamRow(v-if="item.length<6")
       .rlabel откуда:
       select(v-model="src")
         option 1ru
@@ -51,6 +51,8 @@ block content
       div &nbsp;&nbsp;
       .rlabel куда:
       input.dst(v-model="dest")
+    .restreamRow(v-else)
+      .rlabel  количество рестимов огрничено
     .btn(v-if="checkDest()" v-on:click="start()") запустить
     .psBox
       .psItem(v-for="item in ps")
