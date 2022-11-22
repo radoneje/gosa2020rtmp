@@ -68,7 +68,7 @@ router.get('/ps', function(req, res, next) {
     console.log("2");
    // ret.push((data + "").split("\n"))
     ret=ret.filter(r=>{
-      console.log(r);
+     // console.log(r);
       try {
         return r.match(/ffmpeg/)
       }
