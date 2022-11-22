@@ -1,12 +1,22 @@
 var express = require('express');
 var moment = require('moment');
 var router = express.Router();
-const { spawn } = require("node:child_process");
+const { spawn } = require("child_process");
 const process = require("process")
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
+});
+router.get('/restsream', function(req, res, next) {
+
+  res.render("restreamtiView")
+});
+router.post('/restsream', function(req, res, next) {
+//https://s36335.cdn.ngenix.net/s36335-media-origin/live/<Stream_name>/index.m3u8
+  let params=[ "-re", "-i", "https://s36335.cdn.ngenix.net/s36335-media-origin/live/"+reg.body.src+"/index.m3u8", "-c", "copy", "-f", "flv", req.body.dest ]
+  console.log(params)
+  res.json("ok")
 });
 router.post('/startStream', async function(req, res, next) {
 

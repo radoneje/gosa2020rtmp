@@ -1,0 +1,70 @@
+extends layout
+
+block content
+  style.
+    .restreamRow{
+      display: flex;
+      align-items: center;
+      justify-content: left;
+    }
+    .dst{
+      padding: 4px;
+      boder:1px solid gray;
+    }
+    .btn{
+      background:yellowgreen;
+      color: white;
+      cursor: pointer;
+      width: max-content;
+      padding: 8px;
+      margin: 8px 0;
+    }
+    .btn:hover{
+      background: green;
+    }
+  h1= title
+  #app
+    .restreamRow
+      .rlabel откуда:
+      select(v-model="src")
+        option 1ru
+        option 1en
+        option 2ru
+        option 2en
+        option 3ru
+        option 3en
+      div &nbsp;&nbsp;
+      .rlabel куда:
+      input.dst(v-model="dest")
+    .btn(v-if="checkDest()" v-on:click="start()") запустить
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.7.13/dist/vue.js"></script>
+  script.
+    let app= new Vue({
+      el:"#app",
+      data:{
+        src:null,
+        dest:null
+      },
+      methods:{
+        start:async function(){
+            await axios.post("/restsream", {src:this.src, dest:this.dest});
+            this.src=null;
+            this.dest= null;
+        },
+        checkDest:function() {
+          if(!this.src)
+            return false;
+          if(!this.dest)
+            return false;
+          if(!this.dest.match(/^rtmp\:\/\//))
+            return false;
+          return true;
+
+        }
+      },
+      mounred:function (){
+        console.log("vue ready")
+      }
+    })

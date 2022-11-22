@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const { spawn } = require("node:child_process");
+const { spawn } = require("child_process");
 
 /* GET users listing. */
 router.post('/startStream', async function(req, res, next) {
