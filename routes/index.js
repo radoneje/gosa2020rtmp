@@ -8,7 +8,7 @@ const process = require("process")
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
-router.get('/resstream', function(req, res, next) {
+router.get('/restream', function(req, res, next) {
 
   res.render("restreamtiView")
 });
