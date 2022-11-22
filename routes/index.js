@@ -8,15 +8,61 @@ const process = require("process")
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
-router.get('/restsream', function(req, res, next) {
+router.get('/reststream', function(req, res, next) {
 
   res.render("restreamtiView")
 });
+router.get('/ps', function(req, res, next) {
+  let params=[ "-ax" ]
+  let ps = spawn("ps", params );
+  let ret=[];
+  ps.stderr.on("data", data => {
+    //console.log(`stderr: ${data}`);
+  //  ret.push(data)
+  });
+  ps.stdout.on("data", data => {
+  //  console.log(`stdout: ${data}`);
+    ret.push((data + "").split("\n"))
+    console.log(data);
+  });
+  ps.on("close", async (code) => {
+    ret=ret.filter(r=>{
+
+      try {
+        return r.match(/ffmpeg/)
+      }
+      catch (e){
+        return false
+      }
+    })
+
+    res.json(ret)
+  });
+
+
+});
+
 router.post('/restsream', function(req, res, next) {
 //https://s36335.cdn.ngenix.net/s36335-media-origin/live/<Stream_name>/index.m3u8
-  let params=[ "-re", "-i", "https://s36335.cdn.ngenix.net/s36335-media-origin/live/"+reg.body.src+"/index.m3u8", "-c", "copy", "-f", "flv", req.body.dest ]
+  let params=[ "-re", "-i", "https://s36335.cdn.ngenix.net/s36335-media-origin/live/"+req.body.src+"/index.m3u8", "-c", "copy", "-f", "flv", req.body.dest ]
   console.log(params)
+
+
+  let debug= {detached: true, stdio: 'ignore'}
+  debug={}
+
+  let stream = spawn("ffmpeg", params, debug );
+  console.log("restream started: "+ req.body.dest )
+
+  if(debug.detached)
+  stream.unref();
+  else {
+    stream.stderr.on("data", data => {
+      console.log(`stderr: ${data}`);
+    });
+  }
   res.json("ok")
+  // stream.on("close", async (code) => {
 });
 router.post('/startStream', async function(req, res, next) {
 
